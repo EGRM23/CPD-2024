@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ctime>
 #include <chrono>
-#include <cstdlib>
 using namespace std;
 
 int main()
@@ -35,6 +34,7 @@ int main()
     for(int i = 0; i < MAX; i++)
         y[i] = 0;
     
+
     //Second pair of loops
     start = std::chrono::high_resolution_clock::now();
     for (int j = 0; j < MAX; j++)
