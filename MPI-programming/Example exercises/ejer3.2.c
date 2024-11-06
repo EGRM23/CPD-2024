@@ -1,6 +1,3 @@
-// 3.2 Modify the trapezoidal rule so that it will correctly estimate the integral even
-// if comm_sz doesn’t evenly divide n. (You can still assume that n ≥ comm_sz.)
-
 #include <stdio.h>
 #include <mpi.h>
 
@@ -18,15 +15,15 @@ double Trap(
     
     estimate = (f(left_endpt) + f(right_endpt))/2.0;
     for (i = 1; i <= trap_count - 1; i++) {
-        x = left_endpt + i * base_len;
-        estimate += f(x);
+    x = left_endpt + i * base_len;
+    estimate += f(x);
     }
     estimate = estimate * base_len;
     return estimate;
 }
 
 int main(void) {
-    int my_rank, comm_sz, n = 1024, local_n, remainder;
+    int my_rank, comm_sz, n = 1024, local_n;
     double a = 0.0, b = 3.0, h, local_a, local_b;
     double local_int, total_int;
     int source;
@@ -37,17 +34,8 @@ int main(void) {
 
     h = (b - a) / n;
     local_n = n / comm_sz;
-    remainder = n % comm_sz;
 
-    if (my_rank < remainder)
-    {
-        local_n += 1;
-        local_a = a + my_rank * local_n * h;
-    } else {
-        local_a = a + (my_rank * local_n + remainder) * h;
-    }
-
-    //local_a = a + my_rank * local_n * h;
+    local_a = a + my_rank * local_n * h;
     local_b = local_a + local_n * h;
     local_int = Trap(local_a, local_b, local_n, h);
 
@@ -69,3 +57,4 @@ int main(void) {
     MPI_Finalize();
     return 0;
 }
+
